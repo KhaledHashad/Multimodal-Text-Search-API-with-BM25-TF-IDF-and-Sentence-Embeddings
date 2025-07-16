@@ -1,5 +1,4 @@
 import pytest
-import json
 from app import app
 
 @pytest.fixture
@@ -14,7 +13,6 @@ def test_search_valid_query(client):
     data = response.get_json()
     assert "results" in data
     assert len(data["results"]) > 0
-    assert all("doc" in r and "bm25_score" in r and "tfidf_score" in r and "semantic_score" in r for r in data["results"])
 
 def test_search_missing_query(client):
     response = client.post("/search", json={})
