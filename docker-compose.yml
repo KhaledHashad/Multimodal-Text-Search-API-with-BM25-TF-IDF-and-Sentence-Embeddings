@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+version: "3.8"
+
+services:
+  search-api:
+    build: .
+    ports:
+      - "5000:5000"
+=======
+version: "3.8"
+
+services:
+  search-api:
+    build: .
+    ports:
+      - "5000:5000"
+>>>>>>> 031a706 (Initial working search API with Docker)

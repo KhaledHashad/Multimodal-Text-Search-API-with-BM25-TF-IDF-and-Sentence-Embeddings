@@ -1,0 +1,16 @@
+<<<<<<< HEAD
+Flask
+nltk
+rank_bm25
+scikit-learn
+sentence-transformers
+pyngrok
+pytest
+=======
+flask~=3.1.1
+nltk~=3.9.1
+rank-bm25~=0.2.2
+scikit-learn~=1.7.0
+sentence-transformers~=5.0.0
+pyngrok~=7.2.12
+>>>>>>> 031a706 (Initial working search API with Docker)
