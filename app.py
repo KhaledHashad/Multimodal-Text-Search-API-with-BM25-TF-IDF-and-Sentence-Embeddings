@@ -8,7 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sentence_transformers import SentenceTransformer, util
 from pyngrok import ngrok, conf
 
-# 🔐 Set your ngrok Authtokenn
+# 🔐 Set your ngrok Authtoken
 conf.get_default().auth_token = "2zp8rTsJ1Gg6Fgf8GKNO7dY9YJ8_6vxC1e4TqKgPVee2XMe1a"
 
 # --- Create Flask App ---
