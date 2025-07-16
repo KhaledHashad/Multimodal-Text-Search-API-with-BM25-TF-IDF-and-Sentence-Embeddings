@@ -2,14 +2,28 @@ import nltk
 nltk.download('punkt')
 
 from flask import Flask, request, jsonify
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize as orig_word_tokenize
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktLanguageVars
 from rank_bm25 import BM25Okapi
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sentence_transformers import SentenceTransformer, util
 from pyngrok import ngrok, conf
 
-# 🔐 Set your ngrok Authtokenn
+# 🔐 Set your ngrok Authtoken
 conf.get_default().auth_token = "2zp8rTsJ1Gg6Fgf8GKNO7dY9YJ8_6vxC1e4TqKgPVee2XMe1a"
+
+# --- Safe word_tokenize wrapper to handle 'punkt_tab' errors ---
+class CustomLanguageVars(PunktLanguageVars):
+    sent_end_chars = ('.', '!', '?')
+
+tokenizer = PunktSentenceTokenizer(lang_vars=CustomLanguageVars())
+
+def safe_word_tokenize(text):
+    try:
+        return orig_word_tokenize(text)
+    except LookupError as e:
+        print("⚠️ Fallback tokenizer used due to missing punkt model:", e)
+        return text.split()
 
 # --- Create Flask App ---
 app = Flask(__name__)
@@ -23,8 +37,10 @@ docs = [
 ]
 
 # --- BM25 ---
-tokenized_docs = [word_tokenize(doc.lower()) for doc in docs]
-bm25 = BM25Okapi(tokenized_docs)
+def build_bm25_index(docs):
+    return BM25Okapi([safe_word_tokenize(doc.lower()) for doc in docs])
+
+bm25 = build_bm25_index(docs)
 
 # --- TF-IDF ---
 vectorizer = TfidfVectorizer()
@@ -43,7 +59,7 @@ def search():
         return jsonify({"error": "Missing query"}), 400
 
     # BM25
-    tokenized_query = word_tokenize(query.lower())
+    tokenized_query = safe_word_tokenize(query.lower())
     bm25_scores = bm25.get_scores(tokenized_query)
 
     # TF-IDF
