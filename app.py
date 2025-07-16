@@ -12,7 +12,7 @@ from pyngrok import ngrok, conf
 # 🔐 Set your ngrok Authtoken
 conf.get_default().auth_token = "2zp8rTsJ1Gg6Fgf8GKNO7dY9YJ8_6vxC1e4TqKgPVee2XMe1a"
 
-# --- Safe word_tokenize wrapper to handle 'punkt_tab' errors ---
+# --- Safe word_tokenize wrapper to handle 'punkt_tab' errors ----
 class CustomLanguageVars(PunktLanguageVars):
     sent_end_chars = ('.', '!', '?')
 
